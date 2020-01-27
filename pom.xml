@@ -5,7 +5,14 @@
 
     <groupId>com.lazycece.au</groupId>
     <artifactId>au-api-spring-boot</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>au-api-spring-boot-starter</module>
+        <module>au-api-spring-boot-autoconfigure</module>
+        <module>au-api-spring-boot-parent</module>
+        <module>au-api-spring-boot-sample</module>
+    </modules>
     <name>au-api-spring-boot</name>
     <description>Au api for Spring Boot</description>
 
