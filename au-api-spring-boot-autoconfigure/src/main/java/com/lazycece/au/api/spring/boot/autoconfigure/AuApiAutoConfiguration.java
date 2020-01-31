@@ -35,18 +35,18 @@ import org.springframework.util.Assert;
 @EnableConfigurationProperties(AuApiProperties.class)
 @Import(value = {PathMatcherConfiguration.class, SubjectSerializerConfiguration.class})
 @AutoConfigureAfter(value = {PathMatcherConfiguration.class, SubjectSerializerConfiguration.class})
-public class AuApiAutoconfigure {
+public class AuApiAutoConfiguration {
 
     private final AuApiProperties auApiProperties;
 
     @Autowired
-    public AuApiAutoconfigure(AuApiProperties auApiProperties) {
+    public AuApiAutoConfiguration(AuApiProperties auApiProperties) {
         this.auApiProperties = auApiProperties;
     }
 
     @Bean
-    @ConditionalOnBean(value = {TokenHandler.class, ParamsHandler.class})
     @ConditionalOnMissingFilterBean
+    @ConditionalOnBean(value = {TokenHandler.class, ParamsHandler.class})
     @ConditionalOnProperty(prefix = "au-api", name = "enable", havingValue = "true")
     public FilterRegistrationBean<AuServletFilter> filterRegistrationBean(TokenHolder tokenHolder, ParamsHolder paramsHolder, PathMatcher pathMatcher,
                                                                           TokenHandler tokenHandler, ParamsHandler paramsHandler) {
@@ -59,6 +59,7 @@ public class AuApiAutoconfigure {
 
         AuManager auManager = AuManager.getInstance();
         auManager.setPathMatcher(pathMatcher);
+        // use order(-4,-3,-2) to avoid user define au-filter(default order is -1).
         if (auApiProperties.getToken().isEnable()) {
             auManager.addAuFilter(new AuTokenFilter(tokenHolder, tokenHandler))
                     .includePatterns(auApiProperties.getToken().getIncludePatterns())
@@ -66,7 +67,10 @@ public class AuApiAutoconfigure {
                     .order(-4);
         }
         if (auApiProperties.getParam().isEnable()) {
-            auManager.addAuFilter(MultiPartRequestFilter.class).includePatterns("/**").order(-3);
+            auManager.addAuFilter(MultiPartRequestFilter.class)
+                    .includePatterns(auApiProperties.getParam().getIncludePatterns())
+                    .excludePatterns(auApiProperties.getParam().getExcludePatterns())
+                    .order(-3);
             auManager.addAuFilter(new AuParamFilter(paramsHolder, paramsHandler))
                     .includePatterns(auApiProperties.getParam().getIncludePatterns())
                     .excludePatterns(auApiProperties.getParam().getExcludePatterns())
