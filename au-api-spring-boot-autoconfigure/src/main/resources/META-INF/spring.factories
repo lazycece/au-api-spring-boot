@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lazycece.au.api.spring.boot.autoconfigure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.lazycece.au.api.spring.boot.autoconfigure.AuApiAutoconfigure
