@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.lazycece.au</groupId>
             <artifactId>au-api-spring-boot-autoconfigure</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
