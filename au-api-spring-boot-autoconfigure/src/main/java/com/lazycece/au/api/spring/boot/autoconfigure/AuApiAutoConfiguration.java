@@ -30,7 +30,7 @@ import org.springframework.util.Assert;
  * @author lazycece
  */
 @Configuration
-//@ConditionalOnWebApplication todo  open
+@ConditionalOnWebApplication
 @EnableConfigurationProperties(AuApiProperties.class)
 @Import(SubjectSerializerConfiguration.class)
 @AutoConfigureAfter(SubjectSerializerConfiguration.class)
