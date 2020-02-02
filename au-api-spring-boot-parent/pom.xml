@@ -6,9 +6,11 @@
         <artifactId>au-api-spring-boot</artifactId>
         <groupId>com.lazycece.au</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>au-api-spring-boot-parent</artifactId>
+    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
     <description>Providing dependencies management</description>

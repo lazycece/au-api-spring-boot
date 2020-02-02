@@ -6,6 +6,7 @@
         <artifactId>au-api-spring-boot-parent</artifactId>
         <groupId>com.lazycece.au</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../au-api-spring-boot-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>au-api-spring-boot-starter</artifactId>
