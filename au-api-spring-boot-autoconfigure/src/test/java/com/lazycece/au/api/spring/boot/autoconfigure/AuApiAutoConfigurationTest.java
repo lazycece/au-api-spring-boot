@@ -27,17 +27,17 @@ public class AuApiAutoConfigurationTest {
     @Test
     public void testApiTokenHasNoSecret() {
         this.contextRunner
-                .withPropertyValues("au-api.token.enable=true")
+                .withPropertyValues("au.api.token.enable=true")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
                 .run(context -> {
-                    assertThat(context).getFailure().hasMessageContaining("`au-api.token.secret` is null");
+                    assertThat(context).getFailure().hasMessageContaining("`au.api.token.secret` is null");
                 });
     }
 
     @Test
     public void testApiTokenHasNoSecretAndNoTokenHandler() {
         this.contextRunner
-                .withPropertyValues("au-api.token.enable=true")
+                .withPropertyValues("au.api.token.enable=true")
                 .run(context -> {
                     assertThat(context).hasNotFailed();
                 });
@@ -48,8 +48,8 @@ public class AuApiAutoConfigurationTest {
     public void testEnableAuApiToken() {
         this.contextRunner
                 .withPropertyValues(
-                        "au-api.token.enable=true",
-                        "au-api.token.secret=abc")
+                        "au.api.token.enable=true",
+                        "au.api.token.secret=abc")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(TokenHolder.class);
@@ -60,8 +60,8 @@ public class AuApiAutoConfigurationTest {
     public void testCustomSubjectSerializer() {
         this.contextRunner
                 .withPropertyValues(
-                        "au-api.token.enable=true",
-                        "au-api.token.secret=abc")
+                        "au.api.token.enable=true",
+                        "au.api.token.secret=abc")
                 .withUserConfiguration(
                         TestTokenHandlerConfiguration.class,
                         TestSubjectSerializerConfiguration.class)
@@ -74,14 +74,14 @@ public class AuApiAutoConfigurationTest {
     public void testConfigAuApiToken() {
         this.contextRunner
                 .withPropertyValues(
-                        "au-api.token.enable=true",
-                        "au-api.token.header=header",
-                        "au-api.token.issuer=issuer",
-                        "au-api.token.expire=60m",
-                        "au-api.token.refresh=false",
-                        "au-api.token.include-patterns=/a/**,/b/**",
-                        "au-api.token.exclude-patterns=/a/m,/b/m",
-                        "au-api.token.secret=abc")
+                        "au.api.token.enable=true",
+                        "au.api.token.header=header",
+                        "au.api.token.issuer=issuer",
+                        "au.api.token.expire=60m",
+                        "au.api.token.refresh=false",
+                        "au.api.token.include-patterns=/a/**,/b/**",
+                        "au.api.token.exclude-patterns=/a/m,/b/m",
+                        "au.api.token.secret=abc")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(TokenHolder.class);
@@ -91,17 +91,17 @@ public class AuApiAutoConfigurationTest {
     @Test
     public void testApiParamHasNoSecret() {
         this.contextRunner
-                .withPropertyValues("au-api.param.enable=true")
+                .withPropertyValues("au.api.param.enable=true")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
                 .run(context -> {
-                    assertThat(context).getFailure().hasMessageContaining("`au-api.param.secret` is null");
+                    assertThat(context).getFailure().hasMessageContaining("`au.api.param.secret` is null");
                 });
     }
 
     @Test
     public void testApiParamHasNoSecretAndNoParamHandler() {
         this.contextRunner
-                .withPropertyValues("au-api.param.enable=true")
+                .withPropertyValues("au.api.param.enable=true")
                 .run(context -> {
                     assertThat(context).hasNotFailed();
                 });
@@ -110,8 +110,8 @@ public class AuApiAutoConfigurationTest {
     @Test
     public void testEnableAuApiParam() {
         this.contextRunner
-                .withPropertyValues("au-api.param.enable=true")
-                .withPropertyValues("au-api.param.secret=abc")
+                .withPropertyValues("au.api.param.enable=true")
+                .withPropertyValues("au.api.param.secret=abc")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(ParamsHolder.class);
@@ -122,13 +122,13 @@ public class AuApiAutoConfigurationTest {
     public void testConfigAuApiParam() {
         this.contextRunner
                 .withPropertyValues(
-                        "au-api.param.enable=true",
-                        "au-api.param.crypto-type=aes",
-                        "au-api.param.param-clazz=com.lazycece.au.api.spring.boot.autoconfigure.AuApiAutoConfigurationTest.CustomApiParam",
-                        "au-api.param.time-interval=6000ms",
-                        "au-api.param.include-patterns=/a/**,/b/**",
-                        "au-api.param.exclude-patterns=/a/m,/b/m",
-                        "au-api.param.secret=abc")
+                        "au.api.param.enable=true",
+                        "au.api.param.crypto-type=aes",
+                        "au.api.param.param-clazz=com.lazycece.au.api.spring.boot.autoconfigure.AuApiAutoConfigurationTest.CustomApiParam",
+                        "au.api.param.time-interval=6000ms",
+                        "au.api.param.include-patterns=/a/**,/b/**",
+                        "au.api.param.exclude-patterns=/a/m,/b/m",
+                        "au.api.param.secret=abc")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
                 .run(context -> {
                     assertThat(context).hasSingleBean(ParamsHolder.class);
