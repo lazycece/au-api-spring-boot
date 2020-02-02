@@ -13,7 +13,6 @@ import com.lazycece.au.api.token.TokenHandler;
 import com.lazycece.au.api.token.TokenHolder;
 import com.lazycece.au.api.token.filter.AuTokenFilter;
 import com.lazycece.au.api.token.serialize.Serializer;
-import com.lazycece.au.matcher.PathMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -31,12 +30,14 @@ import org.springframework.util.Assert;
  * @author lazycece
  */
 @Configuration
-@ConditionalOnWebApplication
+//@ConditionalOnWebApplication todo  open
 @EnableConfigurationProperties(AuApiProperties.class)
-@Import(value = {PathMatcherConfiguration.class, SubjectSerializerConfiguration.class})
-@AutoConfigureAfter(value = {PathMatcherConfiguration.class, SubjectSerializerConfiguration.class})
+@Import(SubjectSerializerConfiguration.class)
+@AutoConfigureAfter(SubjectSerializerConfiguration.class)
 public class AuApiAutoConfiguration {
 
+    // use order(-4,-3,-2) to avoid user define au-filter(default order is -1).
+    private final int[] order = new int[]{-4, -3, -2};
     private final AuApiProperties auApiProperties;
 
     @Autowired
@@ -46,65 +47,53 @@ public class AuApiAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingFilterBean
-    @ConditionalOnBean(value = {TokenHandler.class, ParamsHandler.class})
-    @ConditionalOnProperty(prefix = "au-api", name = "enable", havingValue = "true")
-    public FilterRegistrationBean<AuServletFilter> filterRegistrationBean(TokenHolder tokenHolder, ParamsHolder paramsHolder, PathMatcher pathMatcher,
-                                                                          TokenHandler tokenHandler, ParamsHandler paramsHandler) {
-        System.out.println("=============== test filterRegistrationBean  ");
-        // TODO: 2020/1/31 validate and clean
+    public FilterRegistrationBean<AuServletFilter> filterRegistrationBean() {
         FilterRegistrationBean<AuServletFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new AuServletFilter());
-        filterRegistrationBean.addUrlPatterns("/*");
-        filterRegistrationBean.setOrder(1);
-
-        AuManager auManager = AuManager.getInstance();
-        auManager.setPathMatcher(pathMatcher);
-        // use order(-4,-3,-2) to avoid user define au-filter(default order is -1).
-        if (auApiProperties.getToken().isEnable()) {
-            auManager.addAuFilter(new AuTokenFilter(tokenHolder, tokenHandler))
-                    .includePatterns(auApiProperties.getToken().getIncludePatterns())
-                    .excludePatterns(auApiProperties.getToken().getExcludePatterns())
-                    .order(-4);
-        }
-        if (auApiProperties.getParam().isEnable()) {
-            auManager.addAuFilter(MultiPartRequestFilter.class)
-                    .includePatterns(auApiProperties.getParam().getIncludePatterns())
-                    .excludePatterns(auApiProperties.getParam().getExcludePatterns())
-                    .order(-3);
-            auManager.addAuFilter(new AuParamFilter(paramsHolder, paramsHandler))
-                    .includePatterns(auApiProperties.getParam().getIncludePatterns())
-                    .excludePatterns(auApiProperties.getParam().getExcludePatterns())
-                    .order(-2);
-        }
+        filterRegistrationBean.setEnabled(auApiProperties.isEnable());
+        filterRegistrationBean.setOrder(auApiProperties.getOrder());
+        filterRegistrationBean.setUrlPatterns(auApiProperties.getUrlPatterns());
         return filterRegistrationBean;
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "au-api.token", name = "secret")
-    public TokenHolder tokenHolder(Serializer serializer) {
-        System.out.println("=============== test tokenHolder  ");
-        // TODO: 2020/1/31 validate and clean
-        AuApiProperties.ApiToken apiToken = auApiProperties.getToken();
+    @ConditionalOnBean(TokenHandler.class)
+    @ConditionalOnProperty(prefix = "au-api.token", name = "enable", havingValue = "true")
+    public TokenHolder tokenHolder(Serializer serializer, TokenHandler tokenHandler) {
+        AuApiProperties.AuApiToken apiToken = auApiProperties.getToken();
         Assert.hasText(apiToken.getSecret(), "`au-api.token.secret` is null");
-        return TokenHolder.build(apiToken.getSecret())
+        TokenHolder tokenHolder = TokenHolder.build(apiToken.getSecret())
                 .serializer(serializer)
                 .tokenHeader(apiToken.getHeader())
                 .issuer(apiToken.getIssuer())
                 .expire(apiToken.getExpire().toMillis())
                 .refresh(apiToken.isRefresh());
+        AuManager.getInstance().addAuFilter(new AuTokenFilter(tokenHolder, tokenHandler))
+                .includePatterns(auApiProperties.getToken().getIncludePatterns())
+                .excludePatterns(auApiProperties.getToken().getExcludePatterns())
+                .order(order[0]);
+        return tokenHolder;
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "au-api.param", name = "secret")
-    public ParamsHolder paramsHolder() {
-        System.out.println("=============== test paramsHolder  ");
-        // TODO: 2020/1/31 validate and clean
-        AuApiProperties.ApiParam apiParam = auApiProperties.getParam();
+    @ConditionalOnBean(ParamsHandler.class)
+    @ConditionalOnProperty(prefix = "au-api.param", name = "enable", havingValue = "true")
+    public ParamsHolder paramsHolder(ParamsHandler paramsHandler) {
+        AuApiProperties.AuApiParam apiParam = auApiProperties.getParam();
         Assert.hasText(apiParam.getSecret(), "`au-api.param.secret` is null");
-        return ParamsHolder.build(apiParam.getSecret())
+        ParamsHolder paramsHolder = ParamsHolder.build(apiParam.getSecret())
                 .dataCrypto(getDataCrypto(apiParam.getCryptoType()))
                 .timeInterval(apiParam.getTimeInterval().toMillis())
                 .paramsClazz(apiParam.getParamClazz());
+        AuManager.getInstance().addAuFilter(MultiPartRequestFilter.class)
+                .includePatterns(auApiProperties.getParam().getIncludePatterns())
+                .excludePatterns(auApiProperties.getParam().getExcludePatterns())
+                .order(order[1]);
+        AuManager.getInstance().addAuFilter(new AuParamFilter(paramsHolder, paramsHandler))
+                .includePatterns(auApiProperties.getParam().getIncludePatterns())
+                .excludePatterns(auApiProperties.getParam().getExcludePatterns())
+                .order(order[2]);
+        return paramsHolder;
     }
 
     private DataCrypto getDataCrypto(CryptoType type) {

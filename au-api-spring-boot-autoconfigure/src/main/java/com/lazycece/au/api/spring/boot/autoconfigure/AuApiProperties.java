@@ -16,8 +16,16 @@ public class AuApiProperties {
      * enable au-api or not
      */
     private boolean enable = true;
-    private ApiToken token;
-    private ApiParam param;
+    /**
+     * servlet order
+     */
+    private int order = 1;
+    /**
+     * servlet url patterns
+     */
+    private List<String> urlPatterns = Collections.singletonList("/*");
+    private AuApiToken token = new AuApiToken();
+    private AuApiParam param = new AuApiParam();
 
     public boolean isEnable() {
         return enable;
@@ -27,27 +35,43 @@ public class AuApiProperties {
         this.enable = enable;
     }
 
-    public ApiToken getToken() {
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
+    public List<String> getUrlPatterns() {
+        return urlPatterns;
+    }
+
+    public void setUrlPatterns(List<String> urlPatterns) {
+        this.urlPatterns = urlPatterns;
+    }
+
+    public AuApiToken getToken() {
         return token;
     }
 
-    public void setToken(ApiToken token) {
+    public void setToken(AuApiToken token) {
         this.token = token;
     }
 
-    public ApiParam getParam() {
+    public AuApiParam getParam() {
         return param;
     }
 
-    public void setParam(ApiParam param) {
+    public void setParam(AuApiParam param) {
         this.param = param;
     }
 
-    static class ApiToken {
+    static class AuApiToken {
         /**
          * enable token authentication or not.
          */
-        private boolean enable = true;
+        private boolean enable = false;
         /**
          * the header name for setting token in http header.
          */
@@ -71,7 +95,7 @@ public class AuApiProperties {
         /**
          * the path patterns which should not be intercept.
          */
-        private List<String> excludePatterns;
+        private List<String> excludePatterns = Collections.emptyList();
         /**
          * the secret key for generating token.
          */
@@ -142,11 +166,11 @@ public class AuApiProperties {
         }
     }
 
-    static class ApiParam {
+    static class AuApiParam {
         /**
          * enable parameter verification or not.
          */
-        private boolean enable = true;
+        private boolean enable = false;
         /**
          * the algorithm for encrypting and decrypting parameters.
          */
@@ -166,7 +190,7 @@ public class AuApiProperties {
         /**
          * the path patterns which should not be intercept.
          */
-        private List<String> excludePatterns;
+        private List<String> excludePatterns = Collections.emptyList();
         /**
          * the secret key for generating signature, encrypting parameters, and decrypting parameters.
          */
