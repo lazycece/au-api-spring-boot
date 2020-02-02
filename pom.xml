@@ -35,7 +35,7 @@
         <module>au-api-spring-boot-parent</module>
         <module>au-api-spring-boot-autoconfigure</module>
         <module>au-api-spring-boot-starter</module>
-        <module>au-api-spring-boot-sample</module>
+<!--        <module>au-api-spring-boot-sample</module>-->
     </modules>
 
     <properties>
