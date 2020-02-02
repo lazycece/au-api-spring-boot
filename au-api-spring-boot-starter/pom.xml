@@ -10,4 +10,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>au-api-spring-boot-starter</artifactId>
     <name>${project.artifactId}</name>
+    <description>au-api stater for spring boot</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.lazycece.au</groupId>
+            <artifactId>au-api-spring-boot-autoconfigure</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>
