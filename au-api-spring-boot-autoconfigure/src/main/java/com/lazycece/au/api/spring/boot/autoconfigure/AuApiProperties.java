@@ -49,7 +49,7 @@ public class AuApiProperties {
         /**
          * the expire time of token.
          */
-        private Duration expire = Duration.ofMillis(1800000L);
+        private Duration expire = Duration.ofMinutes(30);
         /**
          * refresh token or not while finish one request.
          */
@@ -148,7 +148,7 @@ public class AuApiProperties {
         /**
          * the interval time for validating one request is valid or not.
          */
-        private Duration timeInterval = Duration.ofMillis(3000L);
+        private Duration timeInterval = Duration.ofMinutes(3);
         /**
          * the path patterns which should be intercept.
          */
