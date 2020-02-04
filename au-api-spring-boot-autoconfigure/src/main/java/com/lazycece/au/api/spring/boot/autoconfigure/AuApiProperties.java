@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author lazycece
  */
-@ConfigurationProperties("au.api")
+@ConfigurationProperties(prefix = "au.api")
 public class AuApiProperties {
 
     private AuApiToken token = new AuApiToken();
@@ -33,7 +33,7 @@ public class AuApiProperties {
         this.param = param;
     }
 
-    static class AuApiToken {
+    public static class AuApiToken {
         /**
          * enable token authentication or not.
          */
@@ -132,7 +132,7 @@ public class AuApiProperties {
         }
     }
 
-    static class AuApiParam {
+    public static class AuApiParam {
         /**
          * enable parameter verification or not.
          */

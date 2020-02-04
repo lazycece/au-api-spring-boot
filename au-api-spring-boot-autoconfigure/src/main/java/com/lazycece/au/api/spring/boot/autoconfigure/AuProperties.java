@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author lazycece
  */
-@ConfigurationProperties("au")
+@ConfigurationProperties(prefix = "au")
 public class AuProperties {
     /**
      * enable au or not

@@ -1,5 +1,7 @@
 package com.lazycece.au.api.spring.boot.autoconfigure;
 
+import com.lazycece.au.AuManager;
+import com.lazycece.au.AuServletFilter;
 import com.lazycece.au.api.params.ApiParams;
 import com.lazycece.au.api.params.ParamsHandler;
 import com.lazycece.au.api.params.ParamsHolder;
@@ -11,12 +13,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Disable ${@link org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication } before run test.
+ *
  * @author lazycece
  */
 public class AuApiAutoConfigurationTest {
@@ -25,22 +30,26 @@ public class AuApiAutoConfigurationTest {
             .withConfiguration(AutoConfigurations.of(AuApiAutoConfiguration.class));
 
     @Test
+    public void testEnableAu() {
+        this.contextRunner
+//                .withPropertyValues("au.enable=true")
+                .withUserConfiguration(TestEnableAu.class)
+                .run(context -> assertThat(context).hasNotFailed());
+    }
+
+    @Test
     public void testApiTokenHasNoSecret() {
         this.contextRunner
                 .withPropertyValues("au.api.token.enable=true")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).getFailure().hasMessageContaining("`au.api.token.secret` is null");
-                });
+                .run(context -> assertThat(context).getFailure().hasMessageContaining("`au.api.token.secret` is null"));
     }
 
     @Test
     public void testApiTokenHasNoSecretAndNoTokenHandler() {
         this.contextRunner
                 .withPropertyValues("au.api.token.enable=true")
-                .run(context -> {
-                    assertThat(context).hasNotFailed();
-                });
+                .run(context -> assertThat(context).hasNotFailed());
     }
 
 
@@ -51,9 +60,7 @@ public class AuApiAutoConfigurationTest {
                         "au.api.token.enable=true",
                         "au.api.token.secret=abc")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(TokenHolder.class);
-                });
+                .run(context -> assertThat(context).hasSingleBean(TokenHolder.class));
     }
 
     @Test
@@ -65,9 +72,7 @@ public class AuApiAutoConfigurationTest {
                 .withUserConfiguration(
                         TestTokenHandlerConfiguration.class,
                         TestSubjectSerializerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(TokenHolder.class);
-                });
+                .run(context -> assertThat(context).hasSingleBean(TokenHolder.class));
     }
 
     @Test
@@ -83,9 +88,7 @@ public class AuApiAutoConfigurationTest {
                         "au.api.token.exclude-patterns=/a/m,/b/m",
                         "au.api.token.secret=abc")
                 .withUserConfiguration(TestTokenHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(TokenHolder.class);
-                });
+                .run(context -> assertThat(context).hasSingleBean(TokenHolder.class));
     }
 
     @Test
@@ -93,18 +96,14 @@ public class AuApiAutoConfigurationTest {
         this.contextRunner
                 .withPropertyValues("au.api.param.enable=true")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).getFailure().hasMessageContaining("`au.api.param.secret` is null");
-                });
+                .run(context -> assertThat(context).getFailure().hasMessageContaining("`au.api.param.secret` is null"));
     }
 
     @Test
     public void testApiParamHasNoSecretAndNoParamHandler() {
         this.contextRunner
                 .withPropertyValues("au.api.param.enable=true")
-                .run(context -> {
-                    assertThat(context).hasNotFailed();
-                });
+                .run(context -> assertThat(context).hasNotFailed());
     }
 
     @Test
@@ -113,9 +112,7 @@ public class AuApiAutoConfigurationTest {
                 .withPropertyValues("au.api.param.enable=true")
                 .withPropertyValues("au.api.param.secret=abc")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(ParamsHolder.class);
-                });
+                .run(context -> assertThat(context).hasSingleBean(ParamsHolder.class));
     }
 
     @Test
@@ -130,9 +127,21 @@ public class AuApiAutoConfigurationTest {
                         "au.api.param.exclude-patterns=/a/m,/b/m",
                         "au.api.param.secret=abc")
                 .withUserConfiguration(TestParamHandlerConfiguration.class)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(ParamsHolder.class);
-                });
+                .run(context -> assertThat(context).hasSingleBean(ParamsHolder.class));
+    }
+
+    @Configuration
+    static class TestEnableAu {
+        @Bean
+        public FilterRegistrationBean<AuServletFilter> filterRegistrationBean() {
+            FilterRegistrationBean<AuServletFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+            filterRegistrationBean.setFilter(new AuServletFilter());
+            filterRegistrationBean.setEnabled(true);
+            filterRegistrationBean.setOrder(1);
+            filterRegistrationBean.addUrlPatterns("/*");
+            AuManager.getInstance().setWrapper(true);
+            return filterRegistrationBean;
+        }
     }
 
     static class CustomApiParam extends ApiParams {
