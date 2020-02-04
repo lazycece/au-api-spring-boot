@@ -1,7 +1,6 @@
 package com.lazycece.au.api.spring.boot.autoconfigure;
 
 import com.lazycece.au.AuManager;
-import com.lazycece.au.AuServletFilter;
 import com.lazycece.au.api.params.ParamsHandler;
 import com.lazycece.au.api.params.ParamsHolder;
 import com.lazycece.au.api.params.crypt.AESCrypto;
@@ -15,12 +14,11 @@ import com.lazycece.au.api.token.filter.AuTokenFilter;
 import com.lazycece.au.api.token.serialize.Serializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.web.servlet.ConditionalOnMissingFilterBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -32,31 +30,18 @@ import org.springframework.util.Assert;
 @Configuration
 @ConditionalOnWebApplication
 @EnableConfigurationProperties({AuProperties.class, AuApiProperties.class})
-@Import(SubjectSerializerConfiguration.class)
+@Import({SubjectSerializerConfiguration.class, AuConfiguration.class})
 @AutoConfigureAfter(SubjectSerializerConfiguration.class)
+@AutoConfigureBefore(AuConfiguration.class)
 public class AuApiAutoConfiguration {
 
     // use order(-4,-3,-2) to avoid user define au-filter(default order is -1).
     private final int[] order = new int[]{-4, -3, -2};
-    private final AuProperties auProperties;
     private final AuApiProperties auApiProperties;
 
     @Autowired
-    public AuApiAutoConfiguration(AuProperties auProperties, AuApiProperties auApiProperties) {
-        this.auProperties = auProperties;
+    public AuApiAutoConfiguration(AuApiProperties auApiProperties) {
         this.auApiProperties = auApiProperties;
-    }
-
-    @Bean
-    @ConditionalOnMissingFilterBean
-    public FilterRegistrationBean<AuServletFilter> filterRegistrationBean() {
-        FilterRegistrationBean<AuServletFilter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new AuServletFilter());
-        filterRegistrationBean.setEnabled(auProperties.isEnable());
-        filterRegistrationBean.setOrder(auProperties.getOrder());
-        filterRegistrationBean.setUrlPatterns(auProperties.getUrlPatterns());
-        AuManager.getInstance().setWrapper(auProperties.isWrapper());
-        return filterRegistrationBean;
     }
 
     @Bean
