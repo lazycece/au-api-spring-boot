@@ -29,7 +29,7 @@ public class AuConfig {
         };
     }
 
-//    @Bean
+    @Bean
     public ParamsHandler paramsHandler() {
         return new ParamsHandler() {
             @Override
