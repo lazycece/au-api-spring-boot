@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @author lazycece
  */
 @Configuration
-public class AuConfig {
+public class AuApiConfig {
 
     @Bean
     public TokenHandler tokenHandler() {

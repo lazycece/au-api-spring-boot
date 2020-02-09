@@ -55,7 +55,7 @@ Implements `TokenHandler` and `ParamsHandler`, as follow:
 
 ```java
 @Configuration
-public class AuConfig {
+public class AuApiConfig {
 
     @Bean
     public TokenHandler tokenHandler() {
