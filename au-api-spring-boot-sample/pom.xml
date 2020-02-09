@@ -14,7 +14,7 @@
     <description>Providing a sample for au-api-spring-boot</description>
 
     <properties>
-        <au.api.version>0.0.1-SNAPSHOT</au.api.version>
+        <au.api.spring.boot.version>0.0.1-SNAPSHOT</au.api.spring.boot.version>
     </properties>
 
     <repositories>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.lazycece.au</groupId>
             <artifactId>au-api-spring-boot-starter</artifactId>
-            <version>${au.api.version}</version>
+            <version>${au.api.spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
