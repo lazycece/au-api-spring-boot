@@ -45,10 +45,10 @@ au:
   api:
     token:
       enable: true
-      secret: 75HVYG0VQVDEYPLLODZUX99ZCV333EKY
+      secret: secret-key
     param:
       enable: true
-      secret: 75HVYG0VQVDEYPLLODZUX99ZCV333EKY
+      secret: secret-key
 ```
 
 Implements `TokenHandler` and `ParamsHandler`, as follow:
