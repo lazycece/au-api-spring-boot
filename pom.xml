@@ -5,7 +5,7 @@
     <groupId>com.lazycece.au</groupId>
     <artifactId>au-api-spring-boot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>au-api-spring-boot</name>
     <description>Au api for Spring Boot</description>

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>au-api-spring-boot</artifactId>
         <groupId>com.lazycece.au</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -16,7 +16,7 @@
     <description>Providing dependencies management</description>
 
     <properties>
-        <au.api.version>1.0.0</au.api.version>
+        <au.api.version>1.0.1</au.api.version>
         <servlet.api.version>3.1.0</servlet.api.version>
         <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
     </properties>
