@@ -14,7 +14,7 @@
     <description>Providing a sample for au-api-spring-boot</description>
 
     <properties>
-        <au.api.spring.boot.version>1.0.0</au.api.spring.boot.version>
+        <au.api.spring.boot.version>1.0.2</au.api.spring.boot.version>
     </properties>
 
     <repositories>
