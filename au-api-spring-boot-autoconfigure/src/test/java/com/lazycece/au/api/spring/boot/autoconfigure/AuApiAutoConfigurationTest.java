@@ -166,8 +166,8 @@ public class AuApiAutoConfigurationTest {
     static class TestSubjectSerializerConfiguration {
 
         @Bean
-        Serializer<Subject> subjectSerializer() {
-            return new Serializer<Subject>() {
+        Serializer subjectSerializer() {
+            return new Serializer() {
                 @Override
                 public String serialize(Subject subject) throws Exception {
                     return null;
