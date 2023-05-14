@@ -5,7 +5,7 @@
     <groupId>com.lazycece.au</groupId>
     <artifactId>au-api-spring-boot</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2</version>
+    <version>${revision}</version>
 
     <name>au-api-spring-boot</name>
     <description>Au api for Spring Boot</description>
@@ -39,6 +39,9 @@
     </modules>
 
     <properties>
+        <!-- Project revision -->
+        <revision>2.0.0-SNAPSHOT</revision>
+
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -54,6 +57,7 @@
         <maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
         <maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
+        <flatten.maven.plugin.version>1.2.7</flatten.maven.plugin.version>
     </properties>
 
     <profiles>
@@ -181,6 +185,31 @@
                 <configuration>
                     <skip>${maven.deploy.skip}</skip>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${flatten.maven.plugin.version}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
