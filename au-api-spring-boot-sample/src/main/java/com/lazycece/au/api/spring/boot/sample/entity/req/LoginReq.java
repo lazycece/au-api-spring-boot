@@ -3,7 +3,7 @@ package com.lazycece.au.api.spring.boot.sample.entity.req;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author lazycece

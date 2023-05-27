@@ -10,7 +10,7 @@ import com.lazycece.au.api.token.TokenHandler;
 import com.lazycece.au.api.token.TokenHolder;
 import com.lazycece.au.api.token.serialize.Serializer;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>au-api-spring-boot</artifactId>
         <groupId>com.lazycece.au</groupId>
-        <version>1.0.2</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -16,9 +16,9 @@
     <description>Providing dependencies management</description>
 
     <properties>
-        <au.api.version>1.0.2</au.api.version>
-        <servlet.api.version>3.1.0</servlet.api.version>
-        <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
+        <au.api.version>2.0.0</au.api.version>
+        <servlet.api.version>5.0.0</servlet.api.version>
+        <spring.boot.version>3.1.0</spring.boot.version>
     </properties>
 
     <repositories>
@@ -45,8 +45,8 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
                 <version>${servlet.api.version}</version>
             </dependency>
             <dependency>
@@ -61,4 +61,17 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
