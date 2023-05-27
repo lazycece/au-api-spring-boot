@@ -5,6 +5,15 @@
 
 Spring boot project for [Au api](https://github.com/lazycece/au-api).
 
+## Environment
+
+Au environment dependency as follow:
+
+|Au|Java|Spring Boot|
+|---|---|---|
+|1.x|1.8+|2.x|
+|2.x|17+|3.x|
+
 ## Quick Start
 
 Complete example can view [au-api-spring-boot-sample](https://github.com/lazycece/au-api-spring-boot/tree/master/au-api-spring-boot-sample)
