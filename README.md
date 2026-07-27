@@ -9,10 +9,12 @@ Spring boot project for [Au api](https://github.com/lazycece/au-api).
 
 Au environment dependency as follow:
 
-|Au Api Spring Boot|Java|Spring Boot|
-|---|---|---|
-|1.x|1.8+|2.x|
-|2.x|17+|3.x|
+| Au Api Spring Boot |Java| Spring Boot |
+|--------------------|---|-------------|
+| 1.x                |1.8+| 2.x         |
+| 2.x                |17+| 3.x         |
+| 3.x                |17+| 4.x         |
+
 
 ## Quick Start
 
