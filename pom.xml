@@ -58,7 +58,7 @@
         <maven.javadoc.plugin.version>3.5.0</maven.javadoc.plugin.version>
         <maven.gpg.plugin.version>1.6</maven.gpg.plugin.version>
         <flatten.maven.plugin.version>1.2.7</flatten.maven.plugin.version>
-        <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.11.0</central-publishing-maven-plugin.version>
     </properties>
 
     <profiles>
@@ -94,8 +94,8 @@
                         <configuration>
                             <publishingServerId>CentralPortal</publishingServerId>
                             <deploymentName>deployment dlock ${revision}</deploymentName>
-                            <!--                            <autoPublish>true</autoPublish>-->
-                            <!--                            <waitUntil>published</waitUntil>-->
+                            <!--  <autoPublish>true</autoPublish>-->
+                            <!--  <waitUntil>published</waitUntil>-->
                         </configuration>
                     </plugin>
                 </plugins>
